@@ -1,0 +1,67 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Normal reqeust</title>
+    <script type="text/javascript">
+    //<![CDATA[
+    
+    var invocation = new XMLHttpRequest();
+    var url = 'https://ops.eiko.me/cors/cors/normal';
+    var invocationHistoryText;
+    
+    function callOtherDomain(){
+        if(invocation)
+        {    
+            invocation.open('GET', url, true);
+            invocation.onreadystatechange = handler;
+            invocation.send(); 
+        }
+        else
+        {
+            invocationHistoryText = "No Invocation TookPlace At All";
+            var textNode = document.createTextNode(invocationHistoryText);
+            var textDiv = document.getElementById("resultdiv");
+            textDiv.appendChild(textNode);
+        }
+        
+    }
+    function handler(evtXHR)
+    {
+        if (invocation.readyState == 4)
+        {
+                if (invocation.status == 200)
+                {
+                    var response = invocation.responseText;
+                    var invocationHistory = response.getElementsByTagName('invocationHistory').item(0).firstChild.data;
+                    invocationHistoryText = document.createTextNode(invocationHistory);
+                    var textDiv = document.getElementById("textDiv");
+                    textDiv.appendChild(invocationHistoryText);
+                    
+                }
+                else
+                    alert("Invocation Errors Occured");
+        }
+        else
+            alert("currently the application is at" + invocation.readyState);
+    }
+    //]]>
+    
+    
+    </script>
+</head>
+<body>
+    <form id="controlsToInvoke" action="">
+        <p>
+        <input type="button" value="Click to Invoke Another Site" onclick="callOtherDomain()" />
+        </p>    
+        </form>
+    <p id="intro">
+    一个正常的请求，不会出发跨域。
+    </p>
+    <div id="resultdiv">
+        结果.
+    </div>
+</body>
+</html>
